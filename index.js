@@ -1,26 +1,58 @@
 let path = require('path')
-let extend = require('util')._extend
 let BASE_ERROR = 'Circular dependency detected:\r\n'
 let PluginTitle = 'CircularDependencyPlugin'
 
 class CircularDependencyPlugin {
   constructor(options) {
-    this.options = extend({
+    this.options = Object.assign({
       exclude: new RegExp('$^'),
       include: new RegExp('.*'),
       failOnError: false,
       allowAsyncCycles: false,
       onDetected: false,
+      devMode: false,
+      checkInterval: 30000,
       cwd: process.cwd()
     }, options)
+
+    /** @type {{ shouldCheck: boolean, lastCheckedAt: number }} */
+    this.state = {
+      shouldCheck: true,
+      lastCheckedAt: 0,
+    }
   }
 
+  shouldCheck() {
+    return !this.options.devMode  || this.state.shouldCheck;
+  }
+
+  handleNewCompilation() {
+    const now = Date.now();
+    const shouldCheck = now - this.state.lastCheckedAt > this.options.checkInterval
+
+    this.state.shouldCheck = shouldCheck
+    if (shouldCheck) {
+      this.state.lastCheckedAt = now
+    }
+  }
+
+  /** @type {(compiler: import('webpack').Compiler ) => void} */
   apply(compiler) {
     let plugin = this
     let cwd = this.options.cwd
 
+    if (this.options.devMode) {
+      compiler.hooks.watchRun.tap(PluginTitle, () => {
+        this.handleNewCompilation()
+      })
+    }
+
     compiler.hooks.compilation.tap(PluginTitle, (compilation) => {
       compilation.hooks.optimizeModules.tap(PluginTitle, (modules) => {
+        if (!this.shouldCheck()) {
+          return
+        }
+
         if (plugin.options.onStart) {
           plugin.options.onStart({ compilation });
         }

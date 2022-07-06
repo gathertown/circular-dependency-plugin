@@ -39,6 +39,8 @@ let getStatsMessage = (stats, index, type) => {
   }
 }
 
+const waitFor = (interval) => new Promise(resolve => setTimeout(resolve, interval))
+
 for (let version of versions) {
   let webpack = version.module
 
@@ -366,6 +368,40 @@ for (let version of versions) {
         expect(stats.warnings.length).toEqual(0)
       })
     })
+
+    it('works with devMode enabled', async () => {
+      let fs = new MemoryFS()
+      let compiler = webpack({
+        mode: 'development',
+        entry: path.join(__dirname, 'deps/a.js'),
+        output: { path: __dirname },
+        plugins: [ 
+          new CircularDependencyPlugin({
+            devMode: true,
+            checkInterval: 5000,
+          })
+        ]
+      })
+      compiler.outputFileSystem = fs
+
+      const expected = [2, 0, 2, 0, 2];
+
+      const watching = compiler.watch({
+        poll: 500
+      }, (err, { compilation: stats }) => {
+        expect(stats.warnings).toHaveLength(expected.shift());
+      });
+      
+      await waitFor(1000)
+      watching.invalidate()
+      await waitFor(5000)
+      watching.invalidate()
+      await waitFor(2000)
+      watching.invalidate()
+      await waitFor(4000)
+      watching.invalidate()
+      await waitFor(2000)
+      watching.close()
+    }, 30000)
   })
 }
-
