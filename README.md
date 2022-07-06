@@ -4,6 +4,27 @@ Detect modules with circular dependencies when bundling with webpack.
 
 Circular dependencies are often a necessity in complex software, the presence of a circular dependency doesn't always imply a bug, but in the case where you believe a bug exists, this module may help find it.
 
+### Differences from the upstream repo
+Adds support for a faster development workflow by providing options to reduce the number of times 
+this plugin does its processing.
+```js
+// webpack.config.js
+module.exports = {
+  ...
+  plugins: [
+    new CircularDependencyPlugin({
+      // enable developer mode
+      devMode: true,
+      // check only once every 2 minutes
+      checkInterval: 2 * 60 * 1000,
+      // Other configuration options
+      ...
+    })
+  ]
+  ...
+}
+```
+
 ### Webpack Versions
 
 The latest major version of this plugin `5`, supports webpack `4.0.1` and greater as a peer dependency. Major version `4` of this plugin and below are intended to support webpack `3.x.x` and below as a peer dependency.
