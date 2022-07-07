@@ -25,14 +25,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aackerman/circular-dependency-plugin.git"
+    "url": "git+https://github.com/gathertown/circular-dependency-plugin.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aackerman/circular-dependency-plugin/issues"
+    "url": "https://github.com/gathertown/circular-dependency-plugin/issues"
   },
-  "homepage": "https://github.com/aackerman/circular-dependency-plugin#readme",
+  "homepage": "https://github.com/gathertown/circular-dependency-plugin#readme",
   "jest": {
     "testMatch": [
       "**/?(*.)(spec|test).js?(x)"
