@@ -27,13 +27,13 @@ module.exports = {
 
 ### Webpack Versions
 
-The latest major version of this plugin `5`, supports webpack `4.0.1` and greater as a peer dependency. Major version `4` of this plugin and below are intended to support webpack `3.x.x` and below as a peer dependency.
+The latest major version of this plugin `5`
 
 ### Basic Usage
 
 ```js
 // webpack.config.js
-const CircularDependencyPlugin = require('circular-dependency-plugin')
+const CircularDependencyPlugin = require('@gathertown/circular-dependency-plugin')
 
 module.exports = {
   entry: "./src/index",

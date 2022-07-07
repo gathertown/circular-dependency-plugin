@@ -1,5 +1,5 @@
 {
-  "name": "circular-dependency-plugin",
+  "name": "@gathertown/circular-dependency-plugin",
   "main": "index.js",
   "devDependencies": {
     "jest": "^22.4.4",
