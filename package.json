@@ -33,6 +33,9 @@
     "url": "https://github.com/gathertown/circular-dependency-plugin/issues"
   },
   "homepage": "https://github.com/gathertown/circular-dependency-plugin#readme",
+  "overrides": {
+    "cipher-base": "^1.0.5"
+  },
   "jest": {
     "testMatch": [
       "**/?(*.)(spec|test).js?(x)"
